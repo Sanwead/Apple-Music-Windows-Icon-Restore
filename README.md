@@ -1,7 +1,7 @@
 # Apple Music Windows Icon Restore
 
 Restore a recognizable red taskbar icon for the Microsoft Store version of
-Apple Music while it is running. No taskbar pin is required.
+Apple Music while it is running.
 
 [简体中文](README.zh-CN.md) · [MIT](LICENSE) · [Artwork notice](NOTICE.md)
 
@@ -68,5 +68,4 @@ code and check window property writes on a temporary hidden test window.
 
 Code and documentation: MIT, copyright 2026 Sanwead. Apple artwork and
 trademarks are excluded from the MIT grant; see [NOTICE.md](NOTICE.md).
-This unofficial project is not endorsed by Apple and makes no claim to be
-the first implementation of taskbar icon customization.
+This unofficial project is not endorsed by Apple.
