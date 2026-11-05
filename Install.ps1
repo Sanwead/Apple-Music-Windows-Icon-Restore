@@ -1,7 +1,4 @@
-param(
-    [string]$IconPath = (Join-Path $PSScriptRoot 'assets\red.ico'),
-    [switch]$StartWithWindows
-)
+param([string]$IconPath = (Join-Path $PSScriptRoot 'assets\red.ico'))
 $ErrorActionPreference = 'Stop'
 if (-not [Environment]::Is64BitProcess) { throw 'Use 64-bit Windows PowerShell.' }
 $icon = (Resolve-Path -LiteralPath $IconPath).Path
@@ -14,19 +11,28 @@ if (-not $package) { throw 'Install Apple Music from Microsoft Store first.' }
 $state = Join-Path $PSScriptRoot 'state'
 New-Item -ItemType Directory -Path $state -Force | Out-Null
 $stop = Join-Path $state 'stop'
-if (Test-Path -LiteralPath $stop) { Remove-Item -LiteralPath $stop }
-@{IconPath=$icon; AppId="$($package.PackageFamilyName)!App"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $state 'config.json') -Encoding UTF8
-$hostPath = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
-$arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + (Join-Path $PSScriptRoot 'Watch-Icon.ps1') + '"'
-if ($StartWithWindows) {
-    $shell = New-Object -ComObject WScript.Shell
-    $link = $shell.CreateShortcut((Join-Path ([Environment]::GetFolderPath('Startup')) 'AppleMusic Red Icon OSS.lnk'))
-    $link.TargetPath = $hostPath
-    $link.Arguments = $arguments
-    $link.WorkingDirectory = $PSScriptRoot
-    $link.WindowStyle = 7
-    $link.Save()
+# Stop a v0.1 login watcher or an existing companion before updating its config.
+New-Item -ItemType File -Path $stop -Force | Out-Null
+$existing = New-Object System.Threading.Mutex($false, 'Local\AppleMusicRedIconOpenSource')
+$held = $false
+try {
+    try { $held = $existing.WaitOne(10000) } catch [System.Threading.AbandonedMutexException] { $held = $true }
+    if (-not $held) { throw 'Existing icon helper did not stop. Close Apple Music and retry.' }
+    Remove-Item -LiteralPath $stop
+} finally {
+    if ($held) { $existing.ReleaseMutex() }
+    $existing.Dispose()
 }
-Start-Process -FilePath $hostPath -WindowStyle Hidden -ArgumentList $arguments
-Write-Host 'Enabled. Open Apple Music; the icon should change within three seconds.'
-Write-Host 'Keep this folder in place. Run Uninstall.ps1 to disable.'
+@{IconPath=$icon;AppId="$($package.PackageFamilyName)!App"} | ConvertTo-Json |
+    Set-Content -LiteralPath (Join-Path $state 'config.json') -Encoding UTF8
+$taskName = & (Join-Path $PSScriptRoot 'Register-Companion.ps1')
+$oldLink = Join-Path ([Environment]::GetFolderPath('Startup')) 'AppleMusic Red Icon OSS.lnk'
+if (Test-Path -LiteralPath $oldLink) {
+    $shell = New-Object -ComObject WScript.Shell
+    if ($shell.CreateShortcut($oldLink).Arguments -like ('*' + (Join-Path $PSScriptRoot 'Watch-Icon.ps1') + '*')) {
+        Remove-Item -LiteralPath $oldLink
+    }
+}
+if (Get-Process AppleMusic -ErrorAction SilentlyContinue) { Start-ScheduledTask -TaskName $taskName }
+Write-Host 'Installed: starts on Apple Music launch and exits when its process exits.'
+Write-Host 'No login startup or always-running watcher. Keep this folder in place.'
