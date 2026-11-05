@@ -11,6 +11,21 @@ if (-not $package) { throw 'Install Apple Music from Microsoft Store first.' }
 $state = Join-Path $PSScriptRoot 'state'
 New-Item -ItemType Directory -Path $state -Force | Out-Null
 $stop = Join-Path $state 'stop'
+# A previous source/EXE installation can be running from another folder.
+$sid = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+$oldTask = Get-ScheduledTask -TaskName "AppleMusic-RedIcon-$sid" -ErrorAction SilentlyContinue
+if ($oldTask -and $oldTask.Actions.Count -eq 1) {
+    $oldRoot = $oldTask.Actions[0].WorkingDirectory
+    if ($oldRoot -and $oldRoot -ne $PSScriptRoot) {
+        $oldScript = Join-Path $oldRoot 'Watch-Icon.ps1'
+        $expectedArguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $oldScript + '"'
+        if ($oldTask.Actions[0].Arguments -eq $expectedArguments -and
+            (Test-Path -LiteralPath $oldScript) -and
+            (Test-Path -LiteralPath (Join-Path $oldRoot 'state') -PathType Container)) {
+            New-Item -ItemType File -Path (Join-Path $oldRoot 'state\stop') -Force | Out-Null
+        }
+    }
+}
 # Stop a v0.1 login watcher or an existing companion before updating its config.
 New-Item -ItemType File -Path $stop -Force | Out-Null
 $existing = New-Object System.Threading.Mutex($false, 'Local\AppleMusicRedIconOpenSource')

@@ -1,5 +1,12 @@
 # Changes
 
+## 0.3.0
+
+- Add standalone install.exe and uninstall.exe, plus an Installed Apps entry.
+- Support upgrades from the script companion to a dedicated EXE installation.
+- Add a local Windows build script and release checksums.
+- Shorten the English and Chinese setup instructions.
+
 ## 0.2.0
 
 - Start the companion from Apple Music's AppModel launch event instead of login.
