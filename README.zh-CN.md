@@ -1,6 +1,6 @@
 # Apple Music Windows Icon Restore
 
-为微软商店版 Apple Music 恢复红色运行图标，无需固定到任务栏。
+为微软商店版 Apple Music 恢复红色运行图标。
 
 ## 使用
 
@@ -38,4 +38,4 @@ PowerShell 后台进程的内存占用高于原生程序。脚本未签名，组
 不修改安装包，不接管 WindowsApps 权限，不注入代码，不读取账号或播放记录，辅助程序不联网。
 
 代码与文档使用 [MIT](LICENSE) 许可证。Apple 图标素材和商标不包含在 MIT 授权范围内，
-来源和说明见 [NOTICE.md](NOTICE.md)。本项目与 Apple 无隶属关系，也不宣称首创。
+来源和说明见 [NOTICE.md](NOTICE.md)。本项目与 Apple 无隶属关系。
