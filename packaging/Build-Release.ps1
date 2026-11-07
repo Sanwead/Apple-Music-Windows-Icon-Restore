@@ -14,7 +14,7 @@ if (Test-Path -LiteralPath $payload) { Remove-Item -LiteralPath $payload }
 $stream = [IO.File]::Create($payload)
 $zip = New-Object IO.Compression.ZipArchive($stream,[IO.Compression.ZipArchiveMode]::Create)
 try {
-    $files = @('Install.ps1','Uninstall.ps1','Register-Companion.ps1','Watch-Icon.ps1','Taskbar.cs','assets/red.ico','LICENSE','NOTICE.md','THIRD_PARTY_NOTICES.md','README.md','README.zh-CN.md','uninstall.exe')
+    $files = @('Install.ps1','Uninstall.ps1','Register-Companion.ps1','Watch-Icon.ps1','RunHidden.vbs','Taskbar.cs','assets/red.ico','LICENSE','NOTICE.md','THIRD_PARTY_NOTICES.md','README.md','README.zh-CN.md','uninstall.exe')
     foreach ($name in $files) {
         $source = if ($name -eq 'uninstall.exe') { Join-Path $out $name } else { Join-Path $root $name }
         $entry = $zip.CreateEntry($name,[IO.Compression.CompressionLevel]::Optimal)
