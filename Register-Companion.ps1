@@ -24,7 +24,7 @@ $trigger.Subscription = @'
 '@
 $vbsPath = Join-Path $PSScriptRoot 'RunHidden.vbs'
 $action = $task.Actions.Create(0)
-$action.Path = 'wscript.exe'
+$action.Path = "$env:SystemRoot\System32\wscript.exe"
 $action.Arguments = "`"$vbsPath`""
 $action.WorkingDirectory = $PSScriptRoot
 $null = $folder.RegisterTaskDefinition($taskName, $task, 6, $sid, $null, 3, $null)

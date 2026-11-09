@@ -19,7 +19,9 @@ if ($oldTask -and $oldTask.Actions.Count -eq 1) {
     if ($oldRoot -and $oldRoot -ne $PSScriptRoot) {
         $oldScript = Join-Path $oldRoot 'Watch-Icon.ps1'
         $expectedArguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $oldScript + '"'
-        if ($oldTask.Actions[0].Arguments -eq $expectedArguments -and
+        $wrapperArguments = '"' + (Join-Path $oldRoot 'RunHidden.vbs') + '"'
+        $arguments = $oldTask.Actions[0].Arguments
+        if (($arguments -eq $expectedArguments -or $arguments -eq $wrapperArguments) -and
             (Test-Path -LiteralPath $oldScript) -and
             (Test-Path -LiteralPath (Join-Path $oldRoot 'state') -PathType Container)) {
             New-Item -ItemType File -Path (Join-Path $oldRoot 'state\stop') -Force | Out-Null

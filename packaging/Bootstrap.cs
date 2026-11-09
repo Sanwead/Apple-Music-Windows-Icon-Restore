@@ -21,7 +21,7 @@ internal static class Bootstrap
     const string AppsKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\AppleMusicRedIcon";
     const string Marker = ".applemusic-redicon-install";
     const string MarkerValue = "AppleMusicRedIcon-0bfba87d-252c-4c29-a2c2-12a512586014";
-    static readonly string[] Files = { "Install.ps1", "Uninstall.ps1", "Register-Companion.ps1", "Watch-Icon.ps1", "Taskbar.cs", "assets/red.ico", "LICENSE", "NOTICE.md", "THIRD_PARTY_NOTICES.md", "README.md", "README.zh-CN.md", "uninstall.exe" };
+    static readonly string[] Files = { "Install.ps1", "Uninstall.ps1", "Register-Companion.ps1", "Watch-Icon.ps1", "RunHidden.vbs", "Taskbar.cs", "assets/red.ico", "LICENSE", "NOTICE.md", "THIRD_PARTY_NOTICES.md", "README.md", "README.zh-CN.md", "uninstall.exe" };
 
     [STAThread]
     static int Main(string[] args)
