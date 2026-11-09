@@ -1,5 +1,10 @@
 # Changes
 
+## 0.3.1
+
+- Fix the brief PowerShell window flash when Apple Music launches (PR #2).
+- Include the hidden launcher in the installer and track its exit with Apple Music.
+
 ## 0.3.0
 
 - Add standalone install.exe and uninstall.exe, plus an Installed Apps entry.

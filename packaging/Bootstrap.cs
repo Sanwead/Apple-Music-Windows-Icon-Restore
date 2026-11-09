@@ -12,8 +12,8 @@ using Microsoft.Win32;
 [assembly: AssemblyDescription("Event-triggered taskbar icon companion installer")]
 [assembly: AssemblyCompany("Sanwead")]
 [assembly: AssemblyProduct("Apple Music Windows Icon Restore")]
-[assembly: AssemblyVersion("0.3.0.0")]
-[assembly: AssemblyFileVersion("0.3.0.0")]
+[assembly: AssemblyVersion("0.3.1.0")]
+[assembly: AssemblyFileVersion("0.3.1.0")]
 
 internal static class Bootstrap
 {
@@ -131,7 +131,7 @@ internal static class Bootstrap
         RunScript(Path.Combine(directory, "Install.ps1"));
         using (RegistryKey k = Registry.CurrentUser.CreateSubKey(Key)) k.SetValue("InstallDirectory", directory);
         using (RegistryKey k = Registry.CurrentUser.CreateSubKey(AppsKey)) {
-            k.SetValue("DisplayName", "Apple Music Red Icon"); k.SetValue("DisplayVersion", "0.3.0"); k.SetValue("Publisher", "Sanwead");
+            k.SetValue("DisplayName", "Apple Music Red Icon"); k.SetValue("DisplayVersion", "0.3.1"); k.SetValue("Publisher", "Sanwead");
             k.SetValue("InstallLocation", directory); k.SetValue("UninstallString", "\"" + Path.Combine(directory, "uninstall.exe") + "\"");
             k.SetValue("URLInfoAbout", "https://github.com/Sanwead/Apple-Music-Windows-Icon-Restore");
             k.SetValue("NoModify", 1); k.SetValue("NoRepair", 1);
