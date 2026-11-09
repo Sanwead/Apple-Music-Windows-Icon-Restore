@@ -22,9 +22,10 @@ $trigger.Enabled = $true
 $trigger.Subscription = @'
 <QueryList><Query Id="0" Path="Microsoft-Windows-AppModel-Runtime/Admin"><Select Path="Microsoft-Windows-AppModel-Runtime/Admin">*[System[Provider[@Name='Microsoft-Windows-AppModel-Runtime'] and EventID=201] and EventData[Data[@Name='ImageName']='AppleMusic.exe' and Data[@Name='ApplicationName']='AppleInc.AppleMusicWin_nzyj5cx40ttqa!App']]</Select></Query></QueryList>
 '@
+$vbsPath = Join-Path $PSScriptRoot 'RunHidden.vbs'
 $action = $task.Actions.Create(0)
-$action.Path = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
-$action.Arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + (Join-Path $PSScriptRoot 'Watch-Icon.ps1') + '"'
+$action.Path = 'wscript.exe'
+$action.Arguments = "`"$vbsPath`""
 $action.WorkingDirectory = $PSScriptRoot
 $null = $folder.RegisterTaskDefinition($taskName, $task, 6, $sid, $null, 3, $null)
 $registered = $folder.GetTask($taskName)
